@@ -1,5 +1,8 @@
 import React, { useState } from 'react'; 
 import { assets } from '../../assets/assets';
+import axios from 'axios';
+import { addFood } from '../../assets/services/sercvice';
+import { toast } from 'react-toastify';
 
 const AddFood = () => {
   const [image, setImage] = useState(null); 
@@ -16,11 +19,42 @@ const AddFood = () => {
     setData(data=>({...data,[name]: value}));
 
   }
-  const onSubmitHandler=(event) =>{
+  const onSubmitHandler=async(event) =>{
     event.preventDefault();
     if(!image){
-      alert('Please Select An Image.');
+      toast.error('Please Select An Image.');
       return;
+
+    }
+    try{
+      await addFood(data,image);
+      toast.success('Food Added Successfully.');
+      setData({name:'',description:'',category:'Biryani',price:''})
+      setImage(null);
+      
+
+    }catch(error){
+      toast.error('Error adding food.');
+      
+    }
+
+    const formData=new FormData();
+    formData.append('food',JSON.stringify(data));
+    formData.append('file',image);
+
+    try{
+      const response=await axios.post('http://localhost:8080/api/foods',formData,{headers:{"Content-Type":"multipart/form-data"}})
+      if(response.status==200){
+        alert('Food added successfully.');
+        setData({name:'',description:'',category:'Biryani',price:''});
+        setImage(null);
+      }
+
+    }
+    catch(error){
+      console.log('Error',error);
+      alert('Error Adding Food.');
+      
 
     }
   }

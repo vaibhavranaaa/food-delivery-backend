@@ -5,6 +5,7 @@ import Oders from "./pages/Orders/Oders"
 import SideBar from "./components/SideBar/SideBar"
 import Menubar from "./components/MenuBar/Menubar"
 import { useState } from "react"
+import { ToastContainer } from 'react-toastify';
 
 const App = () => {
   const [sidebarVisible,setSidebarVisible]=useState(true);
@@ -20,6 +21,7 @@ const App = () => {
             <div id="page-content-wrapper">
 
               <Menubar toggleSideBar={toggleSideBar}/>
+              <ToastContainer/>
              
                 
               
